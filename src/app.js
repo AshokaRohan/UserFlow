@@ -510,30 +510,36 @@ function renderAutomations() {
       const card = document.createElement('article');
       card.className = 'automation';
       card.innerHTML = `
-        <div>
-          <h3>${escapeHtml(automation.name)} <span class="status-pill">${escapeHtml(automation.status)}</span></h3>
-          <p>${escapeHtml(automation.trigger.label)}</p>
-          <p class="trigger">${escapeHtml(automation.goal)}</p>
-          <ol class="automation-preview">${automation.steps.map((step) => `<li>${escapeHtml(step.title)}</li>`).join('')}</ol>
-          <small>${automation.roi.valueLabel} - ${automation.roi.estimatedMonthlyMinutesSaved} min/month saved - ${automation.runStats.liveRuns} live runs</small>
-        </div>
-        <div class="automation-actions">
-          <button type="button" data-dry-run="${automation.id}" class="secondary">Dry-run</button>
-          <button type="button" data-toggle="${automation.id}">${automation.active ? 'Pause' : 'Enable'}</button>
-          <button type="button" data-delete="${automation.id}" class="secondary">Delete</button>
+        <div class="automation-main">
+          <div class="automation-content">
+            <h3>${escapeHtml(automation.name)} <span class="status-pill status-pill--${escapeHtml(automation.status)}">${escapeHtml(automation.status)}</span></h3>
+            <p class="automation-trigger-label">${escapeHtml(automation.trigger.label)}</p>
+            <p class="trigger">${escapeHtml(automation.goal)}</p>
+            <ol class="automation-preview">${automation.steps.map((step) => `<li>${escapeHtml(step.title)}</li>`).join('')}</ol>
+            <div class="automation-meta">
+              <span class="roi-badge">${escapeHtml(automation.roi.valueLabel)}</span>
+              <span>${automation.roi.estimatedMonthlyMinutesSaved} min/mo saved</span>
+              <span>${automation.runStats.liveRuns} live runs</span>
+            </div>
+          </div>
+          <div class="automation-actions">
+            <button type="button" data-dry-run="${automation.id}" class="secondary btn-sm">Dry-run</button>
+            <button type="button" data-toggle="${automation.id}" class="btn-sm">${automation.active ? 'Pause' : 'Enable'}</button>
+            <button type="button" data-delete="${automation.id}" class="secondary btn-sm danger">Delete</button>
+          </div>
         </div>
       `;
       const pendingDryRun = state.pendingDryRuns.get(automation.id);
       if (pendingDryRun) {
         const panel = document.createElement('div');
-        panel.className = 'dry-run-panel';
+        panel.className = `dry-run-panel${pendingDryRun.triggerMatched ? ' dry-run-panel--matched' : ''}`;
         panel.innerHTML = `
-          <p class="eyebrow">Dry-run preview — ${pendingDryRun.triggerMatched ? 'trigger matched' : 'trigger not yet matched'}</p>
+          <p class="eyebrow">${pendingDryRun.triggerMatched ? '✓ Trigger matched — ready to preview' : 'Trigger not yet matched'}</p>
           <ol>${pendingDryRun.steps.map((step) => `<li>${escapeHtml(step.preview)}</li>`).join('')}</ol>
-          <p class="trigger">${escapeHtml(pendingDryRun.nextPrompt)}</p>
+          <p class="dry-run-prompt">${escapeHtml(pendingDryRun.nextPrompt)}</p>
           <div class="button-row">
-            <button type="button" data-accept-dry-run="${automation.id}">Accept</button>
-            <button type="button" class="secondary" data-dismiss-dry-run="${automation.id}">Dismiss</button>
+            <button type="button" data-accept-dry-run="${automation.id}" class="btn-sm">Accept dry-run</button>
+            <button type="button" class="secondary btn-sm" data-dismiss-dry-run="${automation.id}">Dismiss</button>
           </div>
         `;
         panel.querySelector('[data-accept-dry-run]').addEventListener('click', () => acceptDryRun(automation.id));
