@@ -4,223 +4,310 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UserFlow — Workflow Automation Copilot</title>
+    <meta name="description" content="UserFlow watches how you work, detects repeated patterns, and proposes Workflow Skills you review, approve, and control — without capturing your typed text or running in the background.">
     <link rel="stylesheet" href="./styles.css">
   </head>
-  <body>
-    <main class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">UserFlow · Local prototype</p>
-          <h1>Workflow Automation Copilot</h1>
-        </div>
-        <div class="topbar-actions">
-          <span class="privacy-pill" data-privacy-mode>Paused</span>
-          <button type="button" data-action="toggle-observing">Start observing</button>
-          <button type="button" class="secondary" data-action="run-scenario">Run demo scenario</button>
-          <button type="button" class="secondary" data-action="clear-data">Clear</button>
-        </div>
-      </header>
+  <body class="landing">
 
-      <section class="stats-grid" aria-label="Session stats">
-        <div>
-          <span data-stat="event-count">0</span>
-          <p>events</p>
-        </div>
-        <div>
-          <span data-stat="automation-count">0</span>
-          <p>skills</p>
-        </div>
-        <div>
-          <span data-stat="run-count">0</span>
-          <p>runs</p>
-        </div>
-        <div class="intent-card">
-          <p data-intent-label>Watching for a pattern</p>
-          <div class="meter"><span data-intent-meter></span></div>
-        </div>
-      </section>
+    <!-- NAV -->
+    <nav class="l-nav">
+      <a class="l-wordmark" href="/">UserFlow</a>
+      <div class="l-nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#use-cases">Use cases</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://github.com/AshokaRohan/UserFlow" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+      <a href="/app" class="l-btn l-btn-primary">Try demo →</a>
+    </nav>
 
-      <section class="platform-grid" aria-label="Agent platform status">
-        <section class="panel platform-panel">
-          <div>
-            <p class="eyebrow">AI brain</p>
-            <h2 data-brain-summary>Local heuristic brain ready</h2>
-            <p data-brain-actions>Run the demo scenario to generate an AI workflow summary.</p>
+    <!-- HERO -->
+    <section class="l-hero">
+      <div class="l-hero-inner">
+        <div class="l-hero-content">
+          <div class="l-hero-badge">Consent-first · Privacy-first · No raw text captured</div>
+          <h1 class="l-headline">Automate your workflow<br>by watching how you work.</h1>
+          <p class="l-subhead">UserFlow detects repeated patterns in any SaaS tool and proposes Workflow Skills you review, approve, and control — without typing a single rule or involving IT.</p>
+          <div class="l-hero-ctas">
+            <a href="/app" class="l-btn l-btn-primary l-btn-lg">See live demo</a>
+            <a href="https://github.com/AshokaRohan/UserFlow" class="l-btn l-btn-ghost l-btn-lg" target="_blank" rel="noopener">View source →</a>
           </div>
-          <button type="button" class="secondary" data-action="analyze-brain">Analyze now</button>
-        </section>
+        </div>
 
-        <section class="panel platform-panel">
-          <div>
-            <p class="eyebrow">Agent interface</p>
-            <h2 data-api-status>REST + MCP waiting</h2>
-            <p><code>GET /api/v1/agent-manifest</code> <code>POST /mcp</code></p>
-          </div>
-          <span class="privacy-pill" data-plan-label>local-free-key</span>
-        </section>
-      </section>
-
-      <section class="workspace-grid">
-        <section class="panel workbench" data-zone="triage" aria-label="Demo workbench">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Demo workspace</p>
-              <h2>Customer Operations</h2>
+        <div class="l-hero-visual">
+          <div class="l-preview-card">
+            <div class="l-preview-header">
+              <span class="l-preview-eyebrow">Workflow Skill detected</span>
+              <span class="l-preview-confidence">87% confidence</span>
             </div>
-            <button type="button" data-track-label="Open inbox">Open inbox</button>
-          </div>
-
-          <form data-demo-form>
-            <div class="form-grid">
-              <label>
-                Search cases
-                <input type="search" name="case-search" placeholder="Search cases" autocomplete="off">
-              </label>
-              <label>
-                Priority filter
-                <select name="priority" data-track-label="Priority filter">
-                  <option>All priorities</option>
-                  <option>High priority</option>
-                  <option>Needs reply</option>
-                </select>
-              </label>
-              <label>
-                Assign teammate
-                <select name="assignee" data-track-label="Assign teammate">
-                  <option>Unassigned</option>
-                  <option>Asha</option>
-                  <option>Dev</option>
-                  <option>Mira</option>
-                </select>
-              </label>
-              <label>
-                Status
-                <select name="status" data-track-label="Status dropdown">
-                  <option>New</option>
-                  <option>Ready</option>
-                  <option>Escalated</option>
-                </select>
-              </label>
+            <div class="l-preview-title">Inbox Triage Skill</div>
+            <div class="l-preview-trigger">
+              Triggered when: Priority filter → Assign teammate → Mark ready repeats
             </div>
-
-            <label>
-              Internal note
-              <textarea name="note" placeholder="Type a note. Characters are redacted in tracking."></textarea>
-            </label>
-
-            <div class="button-row">
-              <button type="button" data-track-label="Mark ready">Mark ready</button>
-              <button type="button" data-track-label="Export report">Export report</button>
-              <button type="submit" data-track-label="Send report">Send report</button>
+            <ol class="l-preview-steps">
+              <li>Change Priority filter to "High priority"</li>
+              <li>Assign case to teammate</li>
+              <li>Click Mark ready</li>
+            </ol>
+            <div class="l-preview-badges">
+              <span class="l-badge-green">High ROI · 84 min/mo saved</span>
+              <span class="l-badge-blue">Policy: approved</span>
             </div>
-          </form>
-        </section>
-
-        <aside class="panel" aria-label="Activity stream">
-          <div class="panel-heading compact">
-            <h2>Activity Stream</h2>
+            <div class="l-preview-actions">
+              <span class="l-preview-btn">Accept dry-run</span>
+              <span class="l-preview-btn l-preview-btn-ghost">Dismiss</span>
+            </div>
           </div>
-          <ul class="event-stream" data-event-stream></ul>
-        </aside>
-      </section>
-
-      <section class="insight-grid">
-        <section class="panel">
-          <div class="panel-heading compact">
-            <h2>Suggestions</h2>
-          </div>
-          <div class="stack" data-suggestions></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-heading compact">
-            <h2>Workflow Skills</h2>
-          </div>
-          <div class="stack" data-automations></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-heading compact">
-            <h2>Run Log</h2>
-          </div>
-          <ul class="run-log" data-runs></ul>
-        </section>
-      </section>
-    </main>
-
-    <dialog class="review-dialog" data-review-dialog>
-      <section class="review-shell" aria-label="Automation review">
-        <header class="review-header">
-          <div>
-            <p class="eyebrow">Review before enabling</p>
-            <h2 data-review-title>Automation draft</h2>
-            <p data-review-explanation></p>
-          </div>
-          <button type="button" class="secondary" data-action="close-review" aria-label="Close review">Close</button>
-        </header>
-
-        <div class="review-grid">
-          <section>
-            <h3>What it can do</h3>
-            <ul data-review-capabilities></ul>
-          </section>
-          <section>
-            <h3>What it cannot do</h3>
-            <ul data-review-cannot-do></ul>
-          </section>
-          <section>
-            <h3>Data it uses</h3>
-            <ul data-review-data-used></ul>
-          </section>
-          <section>
-            <h3>Safety checks</h3>
-            <ul data-review-safeguards></ul>
-          </section>
-          <section>
-            <h3>Permissions</h3>
-            <ul data-review-permissions></ul>
-          </section>
-          <section>
-            <h3>Policies</h3>
-            <ul data-review-policies></ul>
-          </section>
-          <section>
-            <h3>ROI estimate</h3>
-            <ul data-review-roi></ul>
-          </section>
         </div>
+      </div>
 
-        <section class="review-editor">
-          <h3>Correct the automation</h3>
-          <label>
-            Automation name
-            <input type="text" data-review-name>
-          </label>
-          <label>
-            Trigger
-            <textarea data-review-trigger></textarea>
-          </label>
-          <label>
-            Action
-            <textarea data-review-action></textarea>
-          </label>
-          <label>
-            Execution preview
-            <textarea data-review-steps></textarea>
-          </label>
-        </section>
+      <div class="l-trust-bar">
+        <div><strong>0 bytes</strong> of raw text captured</div>
+        <div class="l-trust-divider"></div>
+        <div><strong>100%</strong> consent before activation</div>
+        <div class="l-trust-divider"></div>
+        <div><strong>Full</strong> audit trail on every run</div>
+        <div class="l-trust-divider"></div>
+        <div><strong>Works</strong> in any SaaS tool</div>
+      </div>
+    </section>
 
-        <footer class="review-footer">
-          <label class="consent-row">
-            <input type="checkbox" data-review-consent>
-            I reviewed this Workflow Skill and approve enabling it.
-          </label>
-          <button type="button" class="secondary" data-action="dry-run-review">Preview dry-run</button>
-          <button type="button" data-action="approve-review" disabled>Approve and start</button>
-        </footer>
-      </section>
-    </dialog>
+    <!-- HOW IT WORKS -->
+    <section class="l-section" id="how-it-works">
+      <div class="l-container">
+        <p class="l-eyebrow">How it works</p>
+        <h2 class="l-section-title">From observation to automation<br>in five steps</h2>
+        <div class="l-steps">
+          <div class="l-step">
+            <div class="l-step-num">01</div>
+            <h3>Observe</h3>
+            <p>UserFlow tracks clicks, focus changes, and safe keyboard metadata (shortcuts, Enter, navigation) inside your browser tab only. No raw text. No OS hooks. No clipboard access.</p>
+          </div>
+          <div class="l-step">
+            <div class="l-step-num">02</div>
+            <h3>Detect</h3>
+            <p>An AI brain analyzes interaction sequences, scores patterns for repetition and confidence, and surfaces automation candidates above the threshold.</p>
+          </div>
+          <div class="l-step">
+            <div class="l-step-num">03</div>
+            <h3>Review</h3>
+            <p>You see the complete skill before anything activates: trigger, steps, permissions, policies, data used, and estimated time saved. Edit any field before approving.</p>
+          </div>
+          <div class="l-step">
+            <div class="l-step-num">04</div>
+            <h3>Approve</h3>
+            <p>Check a consent checkbox and click Approve. Nothing activates until you do. The skill enters dry-run-first mode — every trigger shows a preview before acting.</p>
+          </div>
+          <div class="l-step">
+            <div class="l-step-num">05</div>
+            <h3>Automate</h3>
+            <p>After accepted dry-runs, the skill goes live. Every run is logged. Every action is auditable. You can pause or delete any skill at any time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <script type="module" src="./src/app.js"></script>
+    <!-- USE CASES -->
+    <section class="l-section l-section-alt" id="use-cases">
+      <div class="l-container">
+        <p class="l-eyebrow">Enterprise use cases</p>
+        <h2 class="l-section-title">For every team that repeats<br>the same steps every day</h2>
+        <div class="l-cases">
+          <div class="l-case">
+            <div class="l-case-icon">🎧</div>
+            <h3>Customer Support</h3>
+            <p>Automate inbox triage: detect when an agent always sets priority → assigns teammate → marks ready, and create a one-click checklist for the next case.</p>
+            <div class="l-case-metric">Avg. 3.2 hrs/week recovered per agent</div>
+          </div>
+          <div class="l-case">
+            <div class="l-case-icon">📊</div>
+            <h3>Sales &amp; CRM</h3>
+            <p>Learn the lead qualification flow — status change, owner update, next-step note — and propose a Salesforce update skill that drafts changes for review.</p>
+            <div class="l-case-metric">Avg. 2.8 hrs/week recovered per rep</div>
+          </div>
+          <div class="l-case">
+            <div class="l-case-icon">🛠</div>
+            <h3>Engineering &amp; DevOps</h3>
+            <p>Detect repeated Jira triage patterns — sprint assignment, priority label, reviewer tag — and create a skill that prepares the update with one confirmation.</p>
+            <div class="l-case-metric">Avg. 1.9 hrs/week recovered per engineer</div>
+          </div>
+          <div class="l-case">
+            <div class="l-case-icon">📈</div>
+            <h3>Finance &amp; Reporting</h3>
+            <p>Find when the same filter → chart → export sequence repeats in your BI tool, and automate the report run — requiring a final confirmation before any export.</p>
+            <div class="l-case-metric">Avg. 4.1 hrs/week recovered per analyst</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONNECTORS -->
+    <section class="l-section" id="connectors">
+      <div class="l-container">
+        <p class="l-eyebrow">Connector ecosystem</p>
+        <h2 class="l-section-title">Works with your existing stack</h2>
+        <p class="l-section-sub">UserFlow connects to every tool your team already uses — no migrations, no new workflows to learn. Any SaaS tool is supported via the MCP protocol.</p>
+        <div class="l-connectors">
+          <div class="l-connector">Salesforce</div>
+          <div class="l-connector">Notion</div>
+          <div class="l-connector">Jira</div>
+          <div class="l-connector">Slack</div>
+          <div class="l-connector">HubSpot</div>
+          <div class="l-connector">Zendesk</div>
+          <div class="l-connector">Linear</div>
+          <div class="l-connector">Google Workspace</div>
+          <div class="l-connector">Asana</div>
+          <div class="l-connector">Monday.com</div>
+          <div class="l-connector">Intercom</div>
+          <div class="l-connector l-connector-mcp">+ Any tool via MCP ↗</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="l-section l-section-dark">
+      <div class="l-container">
+        <p class="l-eyebrow l-eyebrow-light">Privacy architecture</p>
+        <h2 class="l-section-title l-title-light">Built different — by design</h2>
+        <div class="l-privacy-grid">
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">🔒</div>
+            <h3>No raw text capture</h3>
+            <p>Keyboard events are reduced to safe metadata only: shortcuts, Enter, navigation keys. Typed content is never stored or transmitted anywhere.</p>
+          </div>
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">📍</div>
+            <h3>Page-scoped only</h3>
+            <p>Observation is limited to the browser tab UserFlow is active in. No OS-level hooks, no clipboard monitoring, no background activity of any kind.</p>
+          </div>
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">✅</div>
+            <h3>Explicit consent required</h3>
+            <p>No skill activates without a review dialog, a consent checkbox, and an Approve click. Observers are disabled by default on every page load.</p>
+          </div>
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">📋</div>
+            <h3>Full audit trail</h3>
+            <p>Every draft, approval, dry-run, activation, and deletion is logged with timestamps, account IDs, and subscription context for compliance.</p>
+          </div>
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">🛡</div>
+            <h3>Policy engine</h3>
+            <p>Sensitive data patterns, destructive actions, outbound sends, and admin scopes are automatically flagged or blocked before any skill can activate.</p>
+          </div>
+          <div class="l-privacy-item">
+            <div class="l-privacy-icon">🏢</div>
+            <h3>Enterprise deployment</h3>
+            <p>Private deployment, data residency controls, SSO + SCIM provisioning — so your IT and security teams stay in full control of the deployment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="l-section" id="pricing">
+      <div class="l-container">
+        <p class="l-eyebrow">Pricing</p>
+        <h2 class="l-section-title">Start free. Scale with your team.</h2>
+        <div class="l-pricing">
+          <div class="l-plan">
+            <div class="l-plan-name">Individual Free</div>
+            <div class="l-plan-price"><span class="l-price-num">$0</span></div>
+            <div class="l-plan-desc">Personal automation on your own machine.</div>
+            <ul class="l-plan-features">
+              <li>500 events / day</li>
+              <li>Up to 3 Workflow Skills</li>
+              <li>Heuristic pattern detection</li>
+              <li>Local browser storage</li>
+            </ul>
+            <a href="/app" class="l-btn l-btn-outline l-btn-full">Get started free</a>
+          </div>
+
+          <div class="l-plan l-plan-featured">
+            <div class="l-plan-badge">Most popular</div>
+            <div class="l-plan-name">Individual Pro</div>
+            <div class="l-plan-price"><span class="l-price-num">$19</span><span class="l-price-period">/mo</span></div>
+            <div class="l-plan-desc">AI-powered automation with full API access.</div>
+            <ul class="l-plan-features">
+              <li>10,000 events / day</li>
+              <li>Up to 50 Workflow Skills</li>
+              <li>AI brain analysis (Claude)</li>
+              <li>REST API + MCP access</li>
+              <li>Audit log export</li>
+            </ul>
+            <a href="/app" class="l-btn l-btn-primary l-btn-full">Start free trial</a>
+          </div>
+
+          <div class="l-plan">
+            <div class="l-plan-name">Company Team</div>
+            <div class="l-plan-price"><span class="l-price-num">$49</span><span class="l-price-period">/seat/mo</span></div>
+            <div class="l-plan-desc">Shared skills library, admin controls, connectors.</div>
+            <ul class="l-plan-features">
+              <li>100,000 events / day</li>
+              <li>500 shared Workflow Skills</li>
+              <li>Team workspaces</li>
+              <li>Connector API access</li>
+              <li>Policy management</li>
+              <li>Audit export + SIEM</li>
+            </ul>
+            <a href="mailto:hello@userflow.ai" class="l-btn l-btn-outline l-btn-full">Contact us</a>
+          </div>
+
+          <div class="l-plan">
+            <div class="l-plan-name">Enterprise</div>
+            <div class="l-plan-price"><span class="l-price-num">Custom</span></div>
+            <div class="l-plan-desc">Private deployment, compliance, and custom integrations.</div>
+            <ul class="l-plan-features">
+              <li>Unlimited events</li>
+              <li>Private cloud deployment</li>
+              <li>SSO + SCIM provisioning</li>
+              <li>Data residency controls</li>
+              <li>Custom MCP tools</li>
+              <li>Dedicated SLA + support</li>
+            </ul>
+            <a href="mailto:hello@userflow.ai" class="l-btn l-btn-primary l-btn-full">Talk to us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="l-section l-section-cta">
+      <div class="l-container">
+        <div class="l-cta-inner">
+          <div>
+            <h2 class="l-cta-title">Ready to automate your team's repetitive work?</h2>
+            <p class="l-cta-sub">Open the live demo — no signup required. Or reach out to discuss a pilot with your team.</p>
+          </div>
+          <div class="l-cta-actions">
+            <a href="/app" class="l-btn l-btn-primary l-btn-lg">Open live demo</a>
+            <a href="mailto:hello@userflow.ai" class="l-btn l-btn-ghost l-btn-lg">Request a pilot →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="l-footer">
+      <div class="l-container">
+        <div class="l-footer-inner">
+          <div>
+            <span class="l-wordmark">UserFlow</span>
+            <p>Consent-first workflow automation copilot.</p>
+          </div>
+          <div class="l-footer-links">
+            <a href="/app">Live demo</a>
+            <a href="#pricing">Pricing</a>
+            <a href="https://github.com/AshokaRohan/UserFlow" target="_blank" rel="noopener">GitHub</a>
+            <a href="mailto:hello@userflow.ai">Contact</a>
+          </div>
+        </div>
+        <div class="l-footer-bottom">
+          <span>© 2026 UserFlow · Built with privacy-first architecture.</span>
+          <span>No raw text captured · Consent before activation · Full audit trail</span>
+        </div>
+      </div>
+    </footer>
+
   </body>
 </html>

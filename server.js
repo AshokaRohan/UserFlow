@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeWithBrain } from './src/brain.js';
+import { getConnectors, getConnectorById } from './src/connectors.js';
 import {
   approveAutomationDraft,
   createAutomationDraftFromSuggestion,
@@ -25,6 +26,7 @@ import {
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const port = Number(process.env.PORT || 4321);
+const VERSION = '1.0.0';
 const store = {
   events: [],
   automations: [],
@@ -76,9 +78,27 @@ async function handleApi(request, response, url, subscription) {
     sendJson(response, 200, {
       ok: true,
       service: 'userflow-automation-copilot',
-      version: '0.3.0',
+      version: VERSION,
+      aiProvider: process.env.ANTHROPIC_API_KEY ? 'claude' : 'local',
       subscription: redactSubscription(subscription)
     });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/v1/connectors') {
+    const connectors = getConnectors(subscription.plan.id);
+    sendJson(response, 200, { connectors });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname.startsWith('/api/v1/connectors/')) {
+    const id = url.pathname.replace('/api/v1/connectors/', '');
+    const connector = getConnectorById(id);
+    if (!connector) {
+      sendJson(response, 404, { error: 'CONNECTOR_NOT_FOUND' });
+      return;
+    }
+    sendJson(response, 200, { connector });
     return;
   }
 
@@ -274,6 +294,15 @@ async function handleMcp(request, response, subscription) {
 
 async function serveStatic(pathname, response) {
   const safePath = normalize(decodeURIComponent(pathname)).replace(/^(\.\.[/\\])+/, '');
+
+  // /app and /app/ serve the app shell
+  if (safePath === '/app' || safePath === '/app/') {
+    const appPath = join(root, 'app.html');
+    response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    createReadStream(appPath).pipe(response);
+    return;
+  }
+
   const filePath = join(root, safePath === '/' ? 'index.html' : safePath);
   const finalPath = existsSync(filePath) ? filePath : join(root, 'index.html');
   const type = contentType(extname(finalPath));

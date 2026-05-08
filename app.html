@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UserFlow — Live Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow"><a href="/" class="back-link">← UserFlow</a> · Live demo</p>
+          <h1>Workflow Automation Copilot</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="privacy-pill" data-privacy-mode>Paused</span>
+          <button type="button" data-action="toggle-observing">Start observing</button>
+          <div class="scenario-picker">
+            <select data-scenario-select aria-label="Demo scenario">
+              <option value="inbox-triage">Demo: Inbox triage</option>
+              <option value="report-export">Demo: Report export</option>
+              <option value="salesforce-lead">Demo: Salesforce lead</option>
+              <option value="jira-triage">Demo: Jira triage</option>
+              <option value="sensitive-blocked">Demo: Policy block</option>
+            </select>
+            <button type="button" class="secondary" data-action="run-scenario">Run scenario</button>
+          </div>
+          <button type="button" class="secondary" data-action="clear-data">Clear</button>
+        </div>
+      </header>
+
+      <section class="stats-grid" aria-label="Session stats">
+        <div>
+          <span data-stat="event-count">0</span>
+          <p>events</p>
+        </div>
+        <div>
+          <span data-stat="automation-count">0</span>
+          <p>skills</p>
+        </div>
+        <div>
+          <span data-stat="run-count">0</span>
+          <p>runs</p>
+        </div>
+        <div class="intent-card">
+          <p data-intent-label>Watching for a pattern</p>
+          <div class="meter"><span data-intent-meter></span></div>
+        </div>
+      </section>
+
+      <section class="platform-grid" aria-label="Agent platform status">
+        <section class="panel platform-panel">
+          <div>
+            <p class="eyebrow">AI brain</p>
+            <h2 data-brain-summary>Local heuristic brain ready</h2>
+            <p data-brain-actions>Run a demo scenario to generate an AI workflow summary.</p>
+          </div>
+          <button type="button" class="secondary" data-action="analyze-brain">Analyze now</button>
+        </section>
+
+        <section class="panel platform-panel">
+          <div>
+            <p class="eyebrow">Agent interface</p>
+            <h2 data-api-status>REST + MCP ready</h2>
+            <p><code>GET /api/v1/agent-manifest</code> <code>POST /mcp</code></p>
+          </div>
+          <span class="privacy-pill" data-plan-label>browser-only</span>
+        </section>
+      </section>
+
+      <!-- CONNECTORS ROW -->
+      <section class="connectors-bar panel" aria-label="Available connectors">
+        <div class="connectors-bar-label">
+          <p class="eyebrow">Connectors</p>
+          <p class="connectors-bar-sub">Integrations available for Workflow Skills</p>
+        </div>
+        <div class="connectors-list">
+          <span class="connector-chip connector-chip--available" title="Salesforce CRM">Salesforce</span>
+          <span class="connector-chip connector-chip--available" title="Notion pages and databases">Notion</span>
+          <span class="connector-chip connector-chip--available" title="Jira issues and sprints">Jira</span>
+          <span class="connector-chip connector-chip--available" title="Slack channels and DMs">Slack</span>
+          <span class="connector-chip connector-chip--available" title="HubSpot CRM">HubSpot</span>
+          <span class="connector-chip connector-chip--available" title="Zendesk tickets">Zendesk</span>
+          <span class="connector-chip connector-chip--available" title="Google Workspace">Google</span>
+          <span class="connector-chip connector-chip--available" title="Linear issues">Linear</span>
+          <span class="connector-chip connector-chip--mcp" title="Any tool via MCP protocol">+ MCP ↗</span>
+        </div>
+      </section>
+
+      <section class="workspace-grid">
+        <section class="panel workbench" data-zone="triage" aria-label="Demo workbench">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Demo workspace</p>
+              <h2>Customer Operations</h2>
+            </div>
+            <button type="button" data-track-label="Open inbox">Open inbox</button>
+          </div>
+
+          <form data-demo-form>
+            <div class="form-grid">
+              <label>
+                Search cases
+                <input type="search" name="case-search" placeholder="Search cases" autocomplete="off">
+              </label>
+              <label>
+                Priority filter
+                <select name="priority" data-track-label="Priority filter">
+                  <option>All priorities</option>
+                  <option>High priority</option>
+                  <option>Needs reply</option>
+                </select>
+              </label>
+              <label>
+                Assign teammate
+                <select name="assignee" data-track-label="Assign teammate">
+                  <option>Unassigned</option>
+                  <option>Asha</option>
+                  <option>Dev</option>
+                  <option>Mira</option>
+                </select>
+              </label>
+              <label>
+                Status
+                <select name="status" data-track-label="Status dropdown">
+                  <option>New</option>
+                  <option>Ready</option>
+                  <option>Escalated</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Internal note
+              <textarea name="note" placeholder="Type a note. Characters are redacted in tracking."></textarea>
+            </label>
+
+            <div class="button-row">
+              <button type="button" data-track-label="Mark ready">Mark ready</button>
+              <button type="button" data-track-label="Export report">Export report</button>
+              <button type="submit" data-track-label="Send report">Send report</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel" aria-label="Activity stream">
+          <div class="panel-heading compact">
+            <h2>Activity Stream</h2>
+          </div>
+          <ul class="event-stream" data-event-stream></ul>
+        </aside>
+      </section>
+
+      <section class="insight-grid">
+        <section class="panel">
+          <div class="panel-heading compact">
+            <h2>Suggestions</h2>
+          </div>
+          <div class="stack" data-suggestions></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading compact">
+            <h2>Workflow Skills</h2>
+          </div>
+          <div class="stack" data-automations></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading compact">
+            <h2>Run Log</h2>
+          </div>
+          <ul class="run-log" data-runs></ul>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="review-dialog" data-review-dialog>
+      <section class="review-shell" aria-label="Automation review">
+        <header class="review-header">
+          <div>
+            <p class="eyebrow">Review before enabling</p>
+            <h2 data-review-title>Automation draft</h2>
+            <p data-review-explanation></p>
+          </div>
+          <button type="button" class="secondary" data-action="close-review" aria-label="Close review">Close</button>
+        </header>
+
+        <div class="review-grid">
+          <section>
+            <h3>What it can do</h3>
+            <ul data-review-capabilities></ul>
+          </section>
+          <section>
+            <h3>What it cannot do</h3>
+            <ul data-review-cannot-do></ul>
+          </section>
+          <section>
+            <h3>Data it uses</h3>
+            <ul data-review-data-used></ul>
+          </section>
+          <section>
+            <h3>Safety checks</h3>
+            <ul data-review-safeguards></ul>
+          </section>
+          <section>
+            <h3>Permissions</h3>
+            <ul data-review-permissions></ul>
+          </section>
+          <section>
+            <h3>Policies</h3>
+            <ul data-review-policies></ul>
+          </section>
+          <section>
+            <h3>ROI estimate</h3>
+            <ul data-review-roi></ul>
+          </section>
+        </div>
+
+        <section class="review-editor">
+          <h3>Correct the automation</h3>
+          <label>
+            Automation name
+            <input type="text" data-review-name>
+          </label>
+          <label>
+            Trigger
+            <textarea data-review-trigger></textarea>
+          </label>
+          <label>
+            Action
+            <textarea data-review-action></textarea>
+          </label>
+          <label>
+            Execution preview
+            <textarea data-review-steps></textarea>
+          </label>
+        </section>
+
+        <footer class="review-footer">
+          <label class="consent-row">
+            <input type="checkbox" data-review-consent>
+            I reviewed this Workflow Skill and approve enabling it.
+          </label>
+          <button type="button" class="secondary" data-action="dry-run-review">Preview dry-run</button>
+          <button type="button" data-action="approve-review" disabled>Approve and start</button>
+        </footer>
+      </section>
+    </dialog>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

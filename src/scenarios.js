@@ -1,8 +1,8 @@
 export const TEST_SCENARIOS = {
   inboxTriage: {
     id: 'inbox-triage',
-    name: 'Inbox triage skill discovery',
-    description: 'Repeats a customer operations pattern that should create a safe CRM-style Workflow Skill.',
+    name: 'Customer support: Inbox triage',
+    description: 'A support agent repeatedly sets priority, assigns a teammate, and marks the case ready. Creates an inbox triage Workflow Skill.',
     events: [
       ['click', 'Open inbox', 'triage'],
       ['click', 'Priority filter', 'triage'],
@@ -18,11 +18,16 @@ export const TEST_SCENARIOS = {
       ['click', 'Mark ready', 'triage']
     ]
   },
+
   reportExport: {
     id: 'report-export',
-    name: 'Report export skill discovery',
-    description: 'Repeats a reporting pattern with export permissions and dry-run preview.',
+    name: 'Finance: Report export workflow',
+    description: 'A finance analyst repeatedly applies date filters, reviews a chart, and exports — creating a reportable Workflow Skill with export permissions.',
     events: [
+      ['click', 'Date filter', 'reporting'],
+      ['change', 'Date filter', 'reporting'],
+      ['click', 'Metric chart', 'reporting'],
+      ['click', 'Export report', 'reporting'],
       ['click', 'Date filter', 'reporting'],
       ['change', 'Date filter', 'reporting'],
       ['click', 'Metric chart', 'reporting'],
@@ -33,10 +38,54 @@ export const TEST_SCENARIOS = {
       ['click', 'Export report', 'reporting']
     ]
   },
+
+  salesforceLead: {
+    id: 'salesforce-lead',
+    name: 'Sales: Salesforce lead qualification',
+    description: 'A sales rep repeatedly opens a lead, updates the stage, reassigns the owner, and logs a note — creating a CRM update skill with scoped connector permissions.',
+    events: [
+      ['click', 'Open lead', 'crm'],
+      ['change', 'Lead stage', 'crm'],
+      ['click', 'Assign owner', 'crm'],
+      ['change', 'Assign owner', 'crm'],
+      ['focus', 'Next step note', 'crm'],
+      ['click', 'Save lead', 'crm'],
+      ['click', 'Open lead', 'crm'],
+      ['change', 'Lead stage', 'crm'],
+      ['click', 'Assign owner', 'crm'],
+      ['change', 'Assign owner', 'crm'],
+      ['click', 'Save lead', 'crm'],
+      ['click', 'Open lead', 'crm'],
+      ['change', 'Lead stage', 'crm'],
+      ['click', 'Save lead', 'crm']
+    ]
+  },
+
+  jiraTriage: {
+    id: 'jira-triage',
+    name: 'Engineering: Jira ticket triage',
+    description: 'An engineering lead repeatedly opens a ticket, sets sprint, assigns reviewer, and updates priority — creating a Jira triage Workflow Skill.',
+    events: [
+      ['click', 'Open ticket', 'devops'],
+      ['change', 'Sprint assignment', 'devops'],
+      ['click', 'Assign reviewer', 'devops'],
+      ['change', 'Priority label', 'devops'],
+      ['click', 'Update ticket', 'devops'],
+      ['click', 'Open ticket', 'devops'],
+      ['change', 'Sprint assignment', 'devops'],
+      ['click', 'Assign reviewer', 'devops'],
+      ['change', 'Priority label', 'devops'],
+      ['click', 'Update ticket', 'devops'],
+      ['click', 'Open ticket', 'devops'],
+      ['change', 'Sprint assignment', 'devops'],
+      ['click', 'Update ticket', 'devops']
+    ]
+  },
+
   sensitiveBlocked: {
     id: 'sensitive-blocked',
-    name: 'Sensitive action blocked by policy',
-    description: 'Uses sensitive labels so the policy engine blocks activation.',
+    name: 'Policy demo: Sensitive action blocked',
+    description: 'Uses sensitive field labels so the policy engine automatically blocks the skill from activating — demonstrating safety controls.',
     events: [
       ['focus', 'Password token', 'admin'],
       ['change', 'Password token', 'admin'],

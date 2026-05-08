@@ -27,6 +27,7 @@ const nodes = {
   observeToggle: document.querySelector('[data-action="toggle-observing"]'),
   clearData: document.querySelector('[data-action="clear-data"]'),
   runScenario: document.querySelector('[data-action="run-scenario"]'),
+  scenarioSelect: document.querySelector('[data-scenario-select]'),
   analyzeBrain: document.querySelector('[data-action="analyze-brain"]'),
   eventCount: document.querySelector('[data-stat="event-count"]'),
   automationCount: document.querySelector('[data-stat="automation-count"]'),
@@ -91,7 +92,8 @@ nodes.runScenario.addEventListener('click', () => {
   state.observing = true;
   nodes.observeToggle.textContent = 'Pause observing';
   nodes.observeToggle.dataset.state = 'active';
-  runSyntheticScenario();
+  const scenarioId = nodes.scenarioSelect?.value || 'inbox-triage';
+  runSyntheticScenario(scenarioId);
 });
 
 nodes.analyzeBrain.addEventListener('click', () => analyzeBrain());
@@ -208,18 +210,77 @@ function recordSystemEvent(label) {
   state.events = state.events.slice(-220);
 }
 
-function runSyntheticScenario() {
-  const sequence = [
+const BROWSER_SCENARIOS = {
+  'inbox-triage': [
+    ['click', 'Open inbox', 'triage'],
+    ['click', 'Priority filter', 'triage'],
+    ['change', 'Priority filter', 'triage'],
+    ['click', 'Assign teammate', 'triage'],
+    ['change', 'Assign teammate', 'triage'],
+    ['click', 'Mark ready', 'triage'],
     ['click', 'Open inbox', 'triage'],
     ['click', 'Priority filter', 'triage'],
     ['change', 'Priority filter', 'triage'],
     ['click', 'Assign teammate', 'triage'],
     ['change', 'Assign teammate', 'triage'],
     ['click', 'Mark ready', 'triage']
-  ];
+  ],
+  'report-export': [
+    ['click', 'Date filter', 'reporting'],
+    ['change', 'Date filter', 'reporting'],
+    ['click', 'Metric chart', 'reporting'],
+    ['click', 'Export report', 'reporting'],
+    ['click', 'Date filter', 'reporting'],
+    ['change', 'Date filter', 'reporting'],
+    ['click', 'Metric chart', 'reporting'],
+    ['click', 'Export report', 'reporting'],
+    ['click', 'Date filter', 'reporting'],
+    ['change', 'Date filter', 'reporting'],
+    ['click', 'Export report', 'reporting']
+  ],
+  'salesforce-lead': [
+    ['click', 'Open lead', 'crm'],
+    ['change', 'Lead stage', 'crm'],
+    ['click', 'Assign owner', 'crm'],
+    ['change', 'Assign owner', 'crm'],
+    ['click', 'Save lead', 'crm'],
+    ['click', 'Open lead', 'crm'],
+    ['change', 'Lead stage', 'crm'],
+    ['click', 'Assign owner', 'crm'],
+    ['change', 'Assign owner', 'crm'],
+    ['click', 'Save lead', 'crm'],
+    ['click', 'Open lead', 'crm'],
+    ['change', 'Lead stage', 'crm'],
+    ['click', 'Save lead', 'crm']
+  ],
+  'jira-triage': [
+    ['click', 'Open ticket', 'devops'],
+    ['change', 'Sprint assignment', 'devops'],
+    ['click', 'Assign reviewer', 'devops'],
+    ['change', 'Priority label', 'devops'],
+    ['click', 'Update ticket', 'devops'],
+    ['click', 'Open ticket', 'devops'],
+    ['change', 'Sprint assignment', 'devops'],
+    ['click', 'Assign reviewer', 'devops'],
+    ['change', 'Priority label', 'devops'],
+    ['click', 'Update ticket', 'devops'],
+    ['click', 'Open ticket', 'devops'],
+    ['change', 'Sprint assignment', 'devops'],
+    ['click', 'Update ticket', 'devops']
+  ],
+  'sensitive-blocked': [
+    ['focus', 'Password token', 'admin'],
+    ['change', 'Password token', 'admin'],
+    ['click', 'Delete billing user', 'admin'],
+    ['focus', 'Password token', 'admin'],
+    ['change', 'Password token', 'admin'],
+    ['click', 'Delete billing user', 'admin']
+  ]
+};
 
-  const events = [...sequence, ...sequence, ...sequence.slice(0, 3)];
-  events.forEach(([type, targetLabel, zone], index) => {
+function runSyntheticScenario(scenarioId = 'inbox-triage') {
+  const sequence = BROWSER_SCENARIOS[scenarioId] || BROWSER_SCENARIOS['inbox-triage'];
+  sequence.forEach(([type, targetLabel, zone], index) => {
     setTimeout(() => recordEvent({ type, targetLabel, zone }), index * 90);
   });
 }

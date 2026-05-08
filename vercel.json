@@ -2,6 +2,7 @@
   "builds": [
     { "src": "server.js", "use": "@vercel/node" },
     { "src": "index.html", "use": "@vercel/static" },
+    { "src": "app.html", "use": "@vercel/static" },
     { "src": "styles.css", "use": "@vercel/static" },
     { "src": "src/**/*.js", "use": "@vercel/static" },
     { "src": "public/**/*", "use": "@vercel/static" }
@@ -9,6 +10,7 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/server.js" },
     { "src": "/mcp", "dest": "/server.js" },
+    { "src": "/app", "dest": "/app.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
