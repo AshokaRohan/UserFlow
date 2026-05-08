@@ -298,7 +298,7 @@ async function serveStatic(pathname, response) {
   // /app and /app/ serve the app shell
   if (safePath === '/app' || safePath === '/app/') {
     const appPath = join(root, 'app.html');
-    response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache, no-store, must-revalidate' });
     createReadStream(appPath).pipe(response);
     return;
   }
@@ -306,7 +306,9 @@ async function serveStatic(pathname, response) {
   const filePath = join(root, safePath === '/' ? 'index.html' : safePath);
   const finalPath = existsSync(filePath) ? filePath : join(root, 'index.html');
   const type = contentType(extname(finalPath));
-  response.writeHead(200, { 'content-type': type });
+  const headers = { 'content-type': type };
+  if (type.startsWith('text/html')) headers['cache-control'] = 'no-cache, no-store, must-revalidate';
+  response.writeHead(200, headers);
   createReadStream(finalPath).pipe(response);
 }
 
