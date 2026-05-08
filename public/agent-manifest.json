@@ -1,0 +1,68 @@
+{
+  "name": "UserFlow Automation Copilot",
+  "version": "0.3.0",
+  "description": "Agent-friendly local automation copilot with REST APIs, MCP tools, subscription-aware permissions, and a privacy-filtered AI brain.",
+  "baseUrl": "http://127.0.0.1:4321",
+  "auth": {
+    "type": "apiKey",
+    "header": "x-api-key",
+    "localDemoKeys": [
+      "local-free-key",
+      "local-pro-key",
+      "local-team-key",
+      "local-enterprise-key"
+    ]
+  },
+  "rest": {
+    "health": "GET /api/v1/health",
+    "plans": "GET /api/v1/plans",
+    "resetState": "POST /api/v1/state/reset",
+    "ingestEvents": "POST /api/v1/events",
+    "analyze": "POST /api/v1/brain/analyze",
+    "suggestions": "GET /api/v1/suggestions",
+    "scenarios": "GET /api/v1/scenarios",
+    "runScenario": "POST /api/v1/scenarios/run",
+    "skillTemplates": "GET /api/v1/skills/templates",
+    "skills": "GET /api/v1/skills",
+    "draftSkill": "POST /api/v1/skills/draft",
+    "reviewSkill": "POST /api/v1/skills/review",
+    "approveSkill": "POST /api/v1/skills/approve",
+    "dryRunSkill": "POST /api/v1/skills/dry-run",
+    "evaluateSkills": "POST /api/v1/skills/evaluate",
+    "automations": "GET|POST /api/v1/automations",
+    "approveAutomation": "POST /api/v1/automations/approve",
+    "evaluate": "POST /api/v1/automations/evaluate",
+    "audit": "GET /api/v1/audit"
+  },
+  "mcp": {
+    "endpoint": "POST /mcp",
+    "transport": "http-json-rpc",
+    "tools": [
+      "plans.list",
+      "subscription.check",
+      "brain.analyze",
+      "suggestions.detect",
+      "skills.templates",
+      "skills.draft",
+      "skills.review",
+      "skills.approve",
+      "skills.run_dry",
+      "skills.evaluate",
+      "automations.create",
+      "automations.approve",
+      "automations.evaluate",
+      "connectors.invoke"
+    ]
+  },
+  "privacy": {
+    "rawTextStorage": false,
+    "scope": "local-page-and-api-events",
+    "recommendedProductionControls": [
+      "explicit consent",
+      "tenant audit log",
+      "admin policy review",
+      "sensitive field detection",
+      "one-click disable"
+    ]
+  }
+}
