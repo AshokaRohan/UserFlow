@@ -1,9 +1,9 @@
 import { humanizeToken, normalizeEvent } from './core.js';
 
-const SENSITIVE_PATTERNS = /password|secret|token|otp|card|bank|salary|ssn|pan|aadhaar/i;
-const DESTRUCTIVE_PATTERNS = /delete|remove|archive|close|cancel|refund|terminate/i;
-const SEND_PATTERNS = /send|submit|publish|post|email|message|reply/i;
-const ADMIN_PATTERNS = /admin|permission|role|billing|settings/i;
+const SENSITIVE_PATTERNS = /\b(password|secret|api[_-]?key|otp|cvv|ssn|pan|aadhaar|salary|bank[_-]?account)\b/i;
+const DESTRUCTIVE_PATTERNS = /\b(delete|remove|archive|close|cancel|refund|terminate|wipe|purge)\b/i;
+const SEND_PATTERNS = /\b(send|submit|publish|post|email|message|reply)\b/i;
+const ADMIN_PATTERNS = /\b(admin|permission|role|billing|settings)\b/i;
 
 export function createWorkflowSkillDraft(suggestion, events = [], options = {}) {
   const sequence = suggestion.sequence || [];

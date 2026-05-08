@@ -15,9 +15,11 @@ const state = {
   automations: load('automations', []),
   skills: load('skills', []),
   currentDryRun: null,
+  pendingDryRuns: new Map(),
   runs: load('runs', []),
   brain: null,
   platform: null,
+  apiReachable: null,
   moveSampleAt: 0
 };
 
@@ -335,7 +337,17 @@ function syncEventToApi(event) {
       'x-api-key': 'local-pro-key'
     },
     body: JSON.stringify({ event })
-  }).catch(() => {});
+  }).then((res) => {
+    if (state.apiReachable !== res.ok) {
+      state.apiReachable = res.ok;
+      renderPlatform();
+    }
+  }).catch(() => {
+    if (state.apiReachable !== false) {
+      state.apiReachable = false;
+      renderPlatform();
+    }
+  });
 }
 
 function deleteAutomation(id) {
@@ -377,6 +389,9 @@ function renderPlatform() {
   if (state.platform) {
     nodes.apiStatus.textContent = `${state.platform.service} ${state.platform.version}`;
     nodes.planLabel.textContent = state.platform.subscription.plan.name;
+  } else if (state.apiReachable === false) {
+    nodes.apiStatus.textContent = 'API unreachable — browser-only mode';
+    nodes.planLabel.textContent = 'offline';
   } else {
     nodes.apiStatus.textContent = 'Static mode';
     nodes.planLabel.textContent = 'browser-only';
@@ -508,6 +523,24 @@ function renderAutomations() {
           <button type="button" data-delete="${automation.id}" class="secondary">Delete</button>
         </div>
       `;
+      const pendingDryRun = state.pendingDryRuns.get(automation.id);
+      if (pendingDryRun) {
+        const panel = document.createElement('div');
+        panel.className = 'dry-run-panel';
+        panel.innerHTML = `
+          <p class="eyebrow">Dry-run preview — ${pendingDryRun.triggerMatched ? 'trigger matched' : 'trigger not yet matched'}</p>
+          <ol>${pendingDryRun.steps.map((step) => `<li>${escapeHtml(step.preview)}</li>`).join('')}</ol>
+          <p class="trigger">${escapeHtml(pendingDryRun.nextPrompt)}</p>
+          <div class="button-row">
+            <button type="button" data-accept-dry-run="${automation.id}">Accept</button>
+            <button type="button" class="secondary" data-dismiss-dry-run="${automation.id}">Dismiss</button>
+          </div>
+        `;
+        panel.querySelector('[data-accept-dry-run]').addEventListener('click', () => acceptDryRun(automation.id));
+        panel.querySelector('[data-dismiss-dry-run]').addEventListener('click', () => dismissDryRun(automation.id));
+        card.appendChild(panel);
+      }
+
       card.querySelector('[data-dry-run]').addEventListener('click', () => runSkillDryRun(automation.id));
       card.querySelector('[data-toggle]').addEventListener('click', () => toggleAutomation(automation.id));
       card.querySelector('[data-delete]').addEventListener('click', () => deleteAutomation(automation.id));
@@ -520,15 +553,38 @@ function runSkillDryRun(id) {
   const skill = state.skills.find((item) => item.id === id);
   if (!skill) return;
   const dryRun = dryRunWorkflowSkill(skill, state.events);
-  const updated = recordDryRun(skill, dryRun, dryRun.triggerMatched);
+  const updated = recordDryRun(skill, dryRun, false);
   state.skills = [updated, ...state.skills.filter((item) => item.id !== id)];
+  state.pendingDryRuns.set(id, dryRun);
   state.runs.unshift({
     skillId: id,
     name: skill.name,
-    action: dryRun.status,
+    action: 'dry-run-viewed',
     firedAt: new Date().toISOString()
   });
   persist();
+  render();
+}
+
+function acceptDryRun(id) {
+  const skill = state.skills.find((item) => item.id === id);
+  const dryRun = state.pendingDryRuns.get(id);
+  if (!skill || !dryRun) return;
+  const updated = recordDryRun(skill, dryRun, true);
+  state.skills = [updated, ...state.skills.filter((item) => item.id !== id)];
+  state.pendingDryRuns.delete(id);
+  state.runs.unshift({
+    skillId: id,
+    name: skill.name,
+    action: 'dry-run-accepted',
+    firedAt: new Date().toISOString()
+  });
+  persist();
+  render();
+}
+
+function dismissDryRun(id) {
+  state.pendingDryRuns.delete(id);
   render();
 }
 

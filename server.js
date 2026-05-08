@@ -34,6 +34,16 @@ const store = {
 };
 
 const server = createServer(async (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'content-type, x-api-key');
+
+  if (request.method === 'OPTIONS') {
+    response.writeHead(204);
+    response.end();
+    return;
+  }
+
   try {
     const url = new URL(request.url, `http://${request.headers.host}`);
     const subscription = resolveSubscription(request.headers['x-api-key']);
@@ -275,7 +285,14 @@ async function readJson(request) {
   let body = '';
   for await (const chunk of request) body += chunk;
   if (!body) return {};
-  return JSON.parse(body);
+  try {
+    return JSON.parse(body);
+  } catch {
+    const error = new Error('Invalid JSON in request body');
+    error.status = 400;
+    error.code = 'INVALID_JSON';
+    throw error;
+  }
 }
 
 async function readJsonFile(path) {
