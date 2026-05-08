@@ -178,7 +178,6 @@ function recordEvent(event) {
   };
   state.events.push(enriched);
   state.events = state.events.slice(-220);
-  state.suggestions = detectSuggestions(state.events, [...state.automations, ...state.skills]);
   const activations = evaluateWorkflowSkills(state.events, state.skills);
 
   if (activations.length) {
@@ -195,7 +194,7 @@ function recordEvent(event) {
 
   persist();
   syncEventToApi(enriched);
-  render();
+  setTimeout(render, 0);
 }
 
 function recordSystemEvent(label) {
@@ -370,6 +369,7 @@ function toggleAutomation(id) {
 }
 
 function render() {
+  state.suggestions = detectSuggestions(state.events, [...state.automations, ...state.skills]);
   const intent = inferIntent(state.events);
   nodes.eventCount.textContent = String(state.events.length);
   nodes.automationCount.textContent = String(state.skills.length);
