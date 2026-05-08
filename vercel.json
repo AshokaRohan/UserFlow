@@ -1,13 +1,15 @@
 {
   "builds": [
-    { "src": "server.js", "use": "@vercel/node" }
+    { "src": "server.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "src/**/*.js", "use": "@vercel/static" },
+    { "src": "public/**/*", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/server.js" },
     { "src": "/mcp", "dest": "/server.js" },
-    { "src": "/styles.css", "dest": "/styles.css" },
-    { "src": "/src/(.*)", "dest": "/src/$1" },
-    { "src": "/public/(.*)", "dest": "/public/$1" },
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
